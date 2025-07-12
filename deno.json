@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "dev": "cd page && deno task build"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "dom.asynciterable",
+      "deno.ns"
+    ]
+  },
+  "workspace": ["./vite-sharepoint-pages", "./page"]
+}
