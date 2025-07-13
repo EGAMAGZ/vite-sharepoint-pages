@@ -13,5 +13,5 @@
       "deno.ns"
     ]
   },
-  "workspace": ["./vite-sharepoint-pages", "./page"]
+  "workspace": ["./packages/vite-plugin-html-aspx", "./example"]
 }
