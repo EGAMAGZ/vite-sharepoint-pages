@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "cd page && deno task build"
+    "dev": "cd example && deno task build"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"

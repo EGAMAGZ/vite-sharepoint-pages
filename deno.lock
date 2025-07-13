@@ -389,7 +389,7 @@
       "jsr:@std/assert@1"
     ],
     "members": {
-      "page": {
+      "example": {
         "packageJson": {
           "dependencies": [
             "npm:typescript@~5.8.3",
@@ -397,7 +397,7 @@
           ]
         }
       },
-      "vite-sharepoint-pages": {
+      "packages/vite-plugin-html-aspx": {
         "dependencies": [
           "jsr:@std/assert@1",
           "npm:vite@*"
