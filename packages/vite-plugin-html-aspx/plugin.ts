@@ -1,4 +1,4 @@
-import { type Plugin } from "vite";
+import type { Plugin } from "vite";
 import path from "node:path";
 import { toPascalCase } from "@std/text";
 
@@ -11,23 +11,29 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
     name: "vite-plugin-html-aspx",
     apply: "build",
     enforce: "post",
-    generateBundle: (_, bundle) => {
-      const updates: Record<string, typeof bundle[string]> = {};
 
-      for (const [fileName, asset] of Object.entries(bundle)) {
-        if (!fileName.endsWith(".html") || asset.type !== "asset") continue;
+    generateBundle(_, bundle) {
+      const renamedAssets: Record<string, typeof bundle[string]> = {};
+
+      for (const [fileName, htmlAsset] of Object.entries(bundle)) {
+        const isHtmlAsset = fileName.endsWith(".html") && htmlAsset.type === "asset";
+        if (!isHtmlAsset) continue;
+
         const baseName = path.basename(fileName, ".html");
-        const newFileName = `${toPascalCase(baseName)}.aspx`;
+        const transformedName = config.fileNameTransform?.(baseName) ?? toPascalCase(baseName);
+        const newFileName = `${transformedName}.aspx`;
 
-        updates[newFileName] = {
-          ...asset,
+        renamedAssets[newFileName] = {
+          ...htmlAsset,
           fileName: newFileName,
         };
+
         delete bundle[fileName];
       }
-      Object.entries(updates).forEach(([newName, updatedAsset], _) => {
-        bundle[newName] = updatedAsset;
-      });
+
+      for (const [newFileName, updatedAsset] of Object.entries(renamedAssets)) {
+        bundle[newFileName] = updatedAsset;
+      }
     },
   };
 }

@@ -394,7 +394,7 @@
       "jsr:@std/text@^1.0.15"
     ],
     "members": {
-      "example": {
+      "example/vite-ts": {
         "packageJson": {
           "dependencies": [
             "npm:typescript@~5.8.3",
