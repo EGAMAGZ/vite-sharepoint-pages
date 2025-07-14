@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@std/assert@1": "1.0.13",
     "jsr:@std/internal@^1.0.6": "1.0.6",
+    "jsr:@std/text@^1.0.15": "1.0.15",
     "npm:create-vite@latest": "7.0.3",
     "npm:typescript@5.8.3": "5.8.3",
     "npm:typescript@~5.8.3": "5.8.3",
@@ -19,6 +20,9 @@
     },
     "@std/internal@1.0.6": {
       "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
+    },
+    "@std/text@1.0.15": {
+      "integrity": "91f5cc1e12779a3d95f1be34e763f9c28a75a078b7360e6fcaef0d8d9b1e3e7f"
     }
   },
   "npm": {
@@ -386,7 +390,8 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@1"
+      "jsr:@std/assert@1",
+      "jsr:@std/text@^1.0.15"
     ],
     "members": {
       "example": {
