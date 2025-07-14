@@ -34,6 +34,9 @@ export function generateAspxTemplate({
 	<SharePoint:ProjectProperty Property="Description" runat="server"/>
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderMain" runat="server">
+  <div class="ms-hide">
+	<WebPartPages:WebPartZone runat="server" title="loc:TitleBar" id="TitleBar" AllowLayoutChange="false" AllowPersonalization="false" Style="display:none;"><ZoneTemplate></ZoneTemplate></WebPartPages:WebPartZone>
+  </div>
   ${bodyContent}
 </asp:Content>
 `.trim();
