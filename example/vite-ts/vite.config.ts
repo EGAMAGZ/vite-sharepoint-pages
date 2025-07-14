@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { htmlToAspx } from "@egamagz/vite-sharepoint-pages";
+import { htmlToAspx } from "@egamagz/vite-plugin-html-aspx";
 import { join, resolve } from "node:path";
 import { readdirSync } from "node:fs";
 
