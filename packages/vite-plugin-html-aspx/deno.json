@@ -1,5 +1,5 @@
 {
-  "name": "@egamagz/vite-sharepoint-pages",
+  "name": "@egamagz/vite-plugin-html-aspx",
   "version": "0.0.1",
   "imports": {
     "@std/assert": "jsr:@std/assert@1",

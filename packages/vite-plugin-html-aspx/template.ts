@@ -23,8 +23,8 @@ export function generateAspxTemplate({
 	<SharePoint:ScriptBlock runat="server">
 	 var navBarHelpOverrideKey = "WSSEndUser";
 	</SharePoint:ScriptBlock>
-  ${metaTags}
-  ${linkTags}
+	${metaTags}
+	${linkTags}
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderSearchArea" runat="server">
 	<SharePoint:DelegateControl runat="server"
