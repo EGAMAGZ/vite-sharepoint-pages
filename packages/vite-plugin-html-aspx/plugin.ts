@@ -25,7 +25,9 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
           ? asset.source
           : asset.source.toString();
 
-        const result = transformHtmlToAspx(html, fileName);
+        const baseName = path.basename(fileName, ".html");
+        const fileNameTransform = config.fileNameTransform ?? toPascalCase;
+        const result = transformHtmlToAspx(html, fileName, fileNameTransform);
 
         if (!result.success) {
           console.warn(
@@ -34,7 +36,6 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
           continue; // skip this file if invalid
         }
 
-        const baseName = path.basename(fileName, ".html");
         const transformedName = config.fileNameTransform?.(baseName) ??
           toPascalCase(baseName);
         const newFileName = `${transformedName}.aspx`;
