@@ -1,9 +1,9 @@
 export function generateAspxTemplate({
-  metaTags,
+  scriptTags,
   linkTags,
   bodyContent,
 }: {
-  metaTags: string;
+  scriptTags: string;
   linkTags: string;
   bodyContent: string;
 }): string {
@@ -23,7 +23,7 @@ export function generateAspxTemplate({
 	<SharePoint:ScriptBlock runat="server">
 	 var navBarHelpOverrideKey = "WSSEndUser";
 	</SharePoint:ScriptBlock>
-	${metaTags}
+	${scriptTags}
 	${linkTags}
 </asp:Content>
 <SharePoint:StyleBlock runat="server">

@@ -9,7 +9,7 @@ export interface AspxTransformResult {
 
 function rewriteAnchorLinks(
   bodyEl: HTMLElement,
-  fileNameTransform: (fileName: string) => string = (name) => name
+  fileNameTransform: (fileName: string) => string = (name) => name,
 ): void {
   const anchors = bodyEl.querySelectorAll("a[href]");
   anchors.forEach((a) => {
@@ -17,15 +17,19 @@ function rewriteAnchorLinks(
     if (!href) return;
 
     try {
-      const url = new URL(href, "http://dummy-base"); // handle relative URLs safely
+      const url = new URL(href, "http://dummy-base"); // safe relative handling
       if (url.pathname.endsWith(".html")) {
-        const baseName = url.pathname.slice(1, -5); // remove leading slash and .html
-        const transformed = fileNameTransform(baseName);
-        url.pathname = `/${transformed}.aspx`;
-        a.setAttribute("href", url.pathname + url.search + url.hash);
+        const parts = url.pathname.slice(1).split("/"); // remove leading slash and split
+        const fileName = parts.pop()!; // get the file name
+        const baseName = fileName.slice(0, -5); // remove ".html"
+        const transformedFile = fileNameTransform(baseName) + ".aspx";
+        parts.push(transformedFile);
+
+        const finalHref = parts.join("/") + url.search + url.hash;
+        a.setAttribute("href", finalHref);
       }
     } catch {
-      // Skip malformed or non-URL hrefs (like "mailto:")
+      // Skip invalid hrefs (mailto:, tel:, etc.)
     }
   });
 }
@@ -33,7 +37,7 @@ function rewriteAnchorLinks(
 export function transformHtmlToAspx(
   html: string,
   fileName: string,
-  fileNameTransform?: (fileName: string) => string
+  fileNameTransform?: (fileName: string) => string,
 ): AspxTransformResult {
   const errors: string[] = [];
   const root = parse(html);
@@ -44,13 +48,30 @@ export function transformHtmlToAspx(
   if (!head) errors.push(`[${fileName}] Missing <head>`);
   if (!body) errors.push(`[${fileName}] Missing <body>`);
 
-  const metaTags =
-    head?.querySelectorAll("meta")?.map((el) => el.toString()).join("\n") ?? "";
-  const linkTags =
-    head?.querySelectorAll("link")?.map((el) => el.toString()).join("\n") ?? "";
+  const linkTags = head?.querySelectorAll("link")?.map((el) => {
+    return el.toString().replace(
+      /href\s*=\s*["']([^"']+)["']/gi,
+      (_match, url) => {
+        // Remove only the first slash if it exists
+        const newUrl = url.replace(/^\/+/, "");
+        return `href="${newUrl}"`;
+      },
+    );
+  }).join("\n") ?? "";
 
-  if (!metaTags && !linkTags) {
-    errors.push(`[${fileName}] No <meta> or <link> tags found in <head>`);
+  const scriptTags = head?.querySelectorAll("script")?.map((el) => {
+    return el.toString().replace(
+      /src\s*=\s*["']([^"']+)["']/gi,
+      (_match, url) => {
+        // Remove only the first slash if it exists
+        const newUrl = url.replace(/^\/+/, "");
+        return `src="${newUrl}"`;
+      },
+    );
+  }).join("\n") ?? "";
+
+  if (!linkTags) {
+    errors.push(`[${fileName}] No <link> tags found in <head>`);
   }
 
   if (body) {
@@ -66,6 +87,6 @@ export function transformHtmlToAspx(
     return { success: false, errors };
   }
 
-  const output = generateAspxTemplate({ metaTags, linkTags, bodyContent });
+  const output = generateAspxTemplate({ scriptTags, linkTags, bodyContent });
   return { success: true, errors: [], output };
 }
