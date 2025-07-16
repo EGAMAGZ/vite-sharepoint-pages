@@ -33,7 +33,7 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
           console.warn(
             `⚠️ Issues in ${fileName}:\n  - ${result.errors.join("\n  - ")}`,
           );
-          continue; // skip this file if invalid
+          continue;
         }
 
         const transformedName = config.fileNameTransform?.(baseName) ??
@@ -43,7 +43,7 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
         renamedAssets[newFileName] = {
           ...asset,
           fileName: newFileName,
-          source: result.output as string,
+          source: result.output,
         };
 
         delete bundle[fileName];

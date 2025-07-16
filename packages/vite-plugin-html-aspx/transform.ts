@@ -1,11 +1,19 @@
 import { type HTMLElement, parse } from "node-html-parser";
 import { generateAspxTemplate } from "./template.ts";
 
-export interface AspxTransformResult {
-  success: boolean;
+type AspxTransformSuccess = {
+  success: true;
+  errors?: never;
+  output: string;
+};
+
+type AspxTransformError = {
+  success: false;
   errors: string[];
-  output?: string;
-}
+  output?: never;
+};
+
+export type AspxTransformResult = AspxTransformSuccess | AspxTransformError;
 
 function rewriteAnchorLinks(
   bodyEl: HTMLElement,
@@ -17,11 +25,11 @@ function rewriteAnchorLinks(
     if (!href) return;
 
     try {
-      const url = new URL(href, "http://dummy-base"); // safe relative handling
+      const url = new URL(href, "http://dummy-base");
       if (url.pathname.endsWith(".html")) {
-        const parts = url.pathname.slice(1).split("/"); // remove leading slash and split
-        const fileName = parts.pop()!; // get the file name
-        const baseName = fileName.slice(0, -5); // remove ".html"
+        const parts = url.pathname.slice(1).split("/")
+        const fileName = parts.pop()!;
+        const baseName = fileName.slice(0, -5);
         const transformedFile = fileNameTransform(baseName) + ".aspx";
         parts.push(transformedFile);
 
@@ -48,27 +56,27 @@ export function transformHtmlToAspx(
   if (!head) errors.push(`[${fileName}] Missing <head>`);
   if (!body) errors.push(`[${fileName}] Missing <body>`);
 
-  const linkTags = head?.querySelectorAll("link")?.map((el) => {
-    return el.toString().replace(
+  const linkTags = head?.querySelectorAll("link")?.map((el) =>
+    el.toString().replace(
       /href\s*=\s*["']([^"']+)["']/gi,
       (_match, url) => {
         // Remove only the first slash if it exists
         const newUrl = url.replace(/^\/+/, "");
         return `href="${newUrl}"`;
       },
-    );
-  }).join("\n") ?? "";
+    )
+  ).join("\n") ?? "";
 
-  const scriptTags = head?.querySelectorAll("script")?.map((el) => {
-    return el.toString().replace(
+  const scriptTags = head?.querySelectorAll("script")?.map((el) =>
+    el.toString().replace(
       /src\s*=\s*["']([^"']+)["']/gi,
       (_match, url) => {
         // Remove only the first slash if it exists
         const newUrl = url.replace(/^\/+/, "");
         return `src="${newUrl}"`;
       },
-    );
-  }).join("\n") ?? "";
+    )
+  ).join("\n") ?? "";
 
   if (!linkTags) {
     errors.push(`[${fileName}] No <link> tags found in <head>`);
@@ -88,5 +96,5 @@ export function transformHtmlToAspx(
   }
 
   const output = generateAspxTemplate({ scriptTags, linkTags, bodyContent });
-  return { success: true, errors: [], output };
+  return { success: true, output };
 }
