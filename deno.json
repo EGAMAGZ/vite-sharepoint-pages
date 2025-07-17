@@ -16,5 +16,5 @@
       "deno.ns"
     ]
   },
-  "workspace": ["./packages/vite-plugin-html-aspx", "./example/vite-ts"]
+  "workspace": ["./packages/vite-plugin-html-aspx", "example/vite-ts"]
 }
