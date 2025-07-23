@@ -2,10 +2,12 @@ export function generateAspxTemplate({
   scriptTags,
   linkTags,
   bodyContent,
+  stylesContent,
 }: {
   scriptTags: string;
   linkTags: string;
   bodyContent: string;
+  stylesContent: string;
 }): string {
   return `
 <%-- _lcid="3082" _version="16.0.8530" _dal="1" --%>
@@ -25,53 +27,9 @@ export function generateAspxTemplate({
 	</SharePoint:ScriptBlock>
 	${scriptTags}
 	${linkTags}
-	<SharePoint:StyleBlock runat="server">
-
-		#DeltaPlaceHolderSearchArea {
-			/* display: none; */
-			}
-			
-			
-			#titlerow {
-			display: none;
-			}
-			
-			#pageContentTitle {
-			display: none;
-			}
-			
-			#DeltaSiteLogo {
-			position: absolute;
-			left: 80%;
-			}
-			
-			#pageTitle {
-			position: relative;
-			left: -50px;
-			
-			}
-			
-			#DeltaHorizontalQuickLaunch {
-			position: relative;
-			left: -50px;
-			}
-			
-			.tb-ui {
-			padding-bottom: 8px;
-			padding-top: 8px;
-			padding-left: 5px;
-			padding-right: 5px;
-			width: 100%!important;
-			border-width: 1px !important;
-			border-style: solid !important;
-			border-color: rgb(1, 3, 1) !important;
-			border-image: initial !important;
-			border-radius: 5px !important;
-		}
-		
-
-
-	</SharePoint:StyleBlock>
+	${stylesContent ? `<SharePoint:StyleBlock runat="server">
+		${stylesContent}
+	</SharePoint:StyleBlock>` : ''}
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderSearchArea" runat="server">
 	<SharePoint:DelegateControl runat="server"

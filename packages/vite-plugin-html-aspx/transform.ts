@@ -78,6 +78,7 @@ export function transformHtmlToAspx(
     )
   ).join("\n") ?? "";
 
+
   if (!linkTags) {
     errors.push(`[${fileName}] No <link> tags found in <head>`);
   }
@@ -85,6 +86,8 @@ export function transformHtmlToAspx(
   if (body) {
     rewriteAnchorLinks(body, fileNameTransform);
   }
+
+  const stylesContent = head?.querySelectorAll("style")?.map((el) => el.innerHTML)?.join('\n') || null;
 
   const bodyContent = body?.innerHTML ?? "";
   if (!bodyContent.trim()) {
@@ -95,6 +98,6 @@ export function transformHtmlToAspx(
     return { success: false, errors };
   }
 
-  const output = generateAspxTemplate({ scriptTags, linkTags, bodyContent });
+  const output = generateAspxTemplate({ scriptTags, linkTags, bodyContent, stylesContent });
   return { success: true, output };
 }
