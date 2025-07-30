@@ -27,9 +27,13 @@ export function generateAspxTemplate({
 	</SharePoint:ScriptBlock>
 	${scriptTags}
 	${linkTags}
-	${stylesContent ? `<SharePoint:StyleBlock runat="server">
+	${
+    stylesContent
+      ? `<SharePoint:StyleBlock runat="server">
 		${stylesContent}
-	</SharePoint:StyleBlock>` : ''}
+	</SharePoint:StyleBlock>`
+      : ""
+  }
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderSearchArea" runat="server">
 	<SharePoint:DelegateControl runat="server"

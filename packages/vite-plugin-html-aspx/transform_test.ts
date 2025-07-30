@@ -2,7 +2,6 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { transformHtmlToAspx } from "./transform.ts";
 
-
 describe("transformHtmlToAspx", () => {
   it("transforms valid HTML with head, body, link, script, and anchor tags", () => {
     const html = `
@@ -31,7 +30,9 @@ describe("transformHtmlToAspx", () => {
     const result = transformHtmlToAspx(html, "nohead.html");
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors.some(e => e.includes("Missing <head>"))).toBe(true);
+      expect(result.errors.some((e) => e.includes("Missing <head>"))).toBe(
+        true,
+      );
     }
   });
 
@@ -40,7 +41,9 @@ describe("transformHtmlToAspx", () => {
     const result = transformHtmlToAspx(html, "nobody.html");
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors.some(e => e.includes("Missing <body>"))).toBe(true);
+      expect(result.errors.some((e) => e.includes("Missing <body>"))).toBe(
+        true,
+      );
     }
   });
 
@@ -49,7 +52,9 @@ describe("transformHtmlToAspx", () => {
     const result = transformHtmlToAspx(html, "emptybody.html");
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors.some(e => e.includes("<body> is empty"))).toBe(true);
+      expect(result.errors.some((e) => e.includes("<body> is empty"))).toBe(
+        true,
+      );
     }
   });
 
@@ -78,7 +83,11 @@ describe("transformHtmlToAspx", () => {
         </body>
       </html>
     `;
-    const result = transformHtmlToAspx(html, "fileNameTransform.html", (name) => name.toUpperCase());
+    const result = transformHtmlToAspx(
+      html,
+      "fileNameTransform.html",
+      (name) => name.toUpperCase(),
+    );
     expect(result.success).toBe(true);
     expect(result.output).toContain("TEST.aspx");
   });
@@ -88,7 +97,8 @@ describe("transformHtmlToAspx", () => {
     const result = transformHtmlToAspx(html, "nolink.html");
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors.some(e => e.includes("No <link> tags found"))).toBe(true);
+      expect(result.errors.some((e) => e.includes("No <link> tags found")))
+        .toBe(true);
     }
   });
 });
