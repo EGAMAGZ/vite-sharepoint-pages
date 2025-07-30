@@ -1,9 +1,12 @@
 {
   "tasks": {
-    "dev": "cd page && deno task build"
+    "example:build": "cd example/vite-ts && deno task build",
+    "example:dev": "cd example/vite-ts && deno task dev",
+    "test": "cd packages/vite-plugin-html-aspx && deno test"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/text": "jsr:@std/text@^1.0.15"
   },
   "compilerOptions": {
     "lib": [
@@ -13,5 +16,5 @@
       "deno.ns"
     ]
   },
-  "workspace": ["./vite-sharepoint-pages", "./page"]
+  "workspace": ["./packages/vite-plugin-html-aspx", "example/vite-ts"]
 }
