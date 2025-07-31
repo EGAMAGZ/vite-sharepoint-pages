@@ -6,7 +6,8 @@
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
-    "@std/text": "jsr:@std/text@^1.0.15"
+    "@std/text": "jsr:@std/text@^1.0.15",
+    "vite": "npm:vite@^7.0.6"
   },
   "compilerOptions": {
     "lib": [
@@ -16,5 +17,5 @@
       "deno.ns"
     ]
   },
-  "workspace": ["./packages/vite-plugin-html-aspx", "example/vite-ts"]
+  "workspace": ["./packages/vite-plugin-html-aspx", "./example/vite-ts"]
 }

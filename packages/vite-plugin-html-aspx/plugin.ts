@@ -3,6 +3,13 @@ import path from "node:path";
 import { toPascalCase } from "@std/text";
 import { transformHtmlToAspx } from "./transform.ts";
 
+// Define our own types for the bundle assets
+interface BundleAsset {
+  type: string;
+  source: string | any;
+  fileName?: string;
+}
+
 export interface HtmlToAspXConfiguration {
   fileNameTransform?: (fileName: string) => string;
 }
@@ -13,17 +20,18 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
     apply: "build",
     enforce: "post",
 
-    generateBundle(_, bundle) {
-      const renamedAssets: Record<string, typeof bundle[string]> = {};
+    generateBundle(_: unknown, bundle: Record<string, any>) {
+      const renamedAssets: Record<string, BundleAsset> = {};
 
       for (const [fileName, asset] of Object.entries(bundle)) {
+        const typedAsset = asset as BundleAsset;
         const isHtmlAsset = fileName.endsWith(".html") &&
-          asset.type === "asset";
+          typedAsset.type === "asset";
         if (!isHtmlAsset) continue;
 
-        const html = typeof asset.source === "string"
-          ? asset.source
-          : asset.source.toString();
+        const html = typeof typedAsset.source === "string"
+          ? typedAsset.source
+          : typedAsset.source.toString();
 
         const baseName = path.basename(fileName, ".html");
         const fileNameTransform = config.fileNameTransform ?? toPascalCase;
@@ -41,7 +49,7 @@ export function htmlToAspx(config: HtmlToAspXConfiguration = {}): Plugin {
         const newFileName = `${transformedName}.aspx`;
 
         renamedAssets[newFileName] = {
-          ...asset,
+          ...typedAsset,
           fileName: newFileName,
           source: result.output,
         };

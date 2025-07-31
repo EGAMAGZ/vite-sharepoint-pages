@@ -42,6 +42,18 @@ function rewriteAnchorLinks(
   });
 }
 
+function rewriteImageLinks(bodyEl: HTMLElement): void {
+  const images = bodyEl.querySelectorAll("img[src]");
+  images.forEach((img) => {
+    const src = img.getAttribute("src");
+    if (!src) return;
+
+    // Remove the first "/" if it exists
+    const newSrc = src.replace(/^\/+/, "");
+    img.setAttribute("src", newSrc);
+  });
+}
+
 export function transformHtmlToAspx(
   html: string,
   fileName: string,
@@ -86,11 +98,12 @@ export function transformHtmlToAspx(
 
   if (body) {
     rewriteAnchorLinks(body, fileNameTransform);
+    rewriteImageLinks(body);
   }
 
   const stylesContent =
     head?.querySelectorAll("style")?.map((el) => el.innerHTML)?.join("\n") ||
-    null;
+    "";
 
   const bodyContent = body?.innerHTML ?? "";
   if (!bodyContent.trim()) {
